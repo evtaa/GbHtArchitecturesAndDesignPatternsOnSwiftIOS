@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "GameSession.remainingQuestions.getter:GameSession.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "usedQuestions">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GameViewController.answerATouchUpInside(_:):GameViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "GameViewController.configQuestionForViewController():GameViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "GameSession.chooseAnswer(question:answer:):GameSession.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "countTrueAnswers">
+            </PersistentString>
+            <PersistentString
+               value = "numberCurrentQuestions">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "GameSession.chooseAnswer(question:answer:flagCompleteGame:):GameSession.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "resultCheckAnswer">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #1 in GameSession.remainingQuestions.getter:GameSession.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
