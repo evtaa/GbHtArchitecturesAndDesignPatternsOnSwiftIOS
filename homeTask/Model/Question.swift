@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Question {
+struct Question: Codable {
     var textQuestion: String
     var textAnswers: Dictionary <String,Bool>
 }
