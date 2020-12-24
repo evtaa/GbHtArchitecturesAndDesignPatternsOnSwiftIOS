@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A830D0F0258F67AF00C00782 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A830D0EF258F67AF00C00782 /* SettingViewController.swift */; };
+		A830D0F9258F778500C00782 /* GettingOfQuestionsStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A830D0F8258F778500C00782 /* GettingOfQuestionsStrategy.swift */; };
+		A830D105258F953600C00782 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A830D104258F953600C00782 /* Observable.swift */; };
+		A830D114258FAEFE00C00782 /* AddingQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A830D113258FAEFE00C00782 /* AddingQuestionViewController.swift */; };
+		A830D11F258FD3E800C00782 /* AdditionalQuestionsCaretaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A830D11E258FD3E800C00782 /* AdditionalQuestionsCaretaker.swift */; };
+		A830D124258FD6A900C00782 /* SettingCaretake.swift in Sources */ = {isa = PBXBuildFile; fileRef = A830D123258FD6A900C00782 /* SettingCaretake.swift */; };
 		A83C3340258A8544004B6B79 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C333F258A8544004B6B79 /* Record.swift */; };
 		A83C3345258A98F0004B6B79 /* RecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C3344258A98F0004B6B79 /* RecordsViewController.swift */; };
 		A83C3364258A9BB6004B6B79 /* RecordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83C3362258A9BB6004B6B79 /* RecordTableViewCell.swift */; };
@@ -45,6 +51,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A830D0EF258F67AF00C00782 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		A830D0F8258F778500C00782 /* GettingOfQuestionsStrategy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingOfQuestionsStrategy.swift; sourceTree = "<group>"; };
+		A830D104258F953600C00782 /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
+		A830D113258FAEFE00C00782 /* AddingQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddingQuestionViewController.swift; sourceTree = "<group>"; };
+		A830D11E258FD3E800C00782 /* AdditionalQuestionsCaretaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalQuestionsCaretaker.swift; sourceTree = "<group>"; };
+		A830D123258FD6A900C00782 /* SettingCaretake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCaretake.swift; sourceTree = "<group>"; };
 		A83C333F258A8544004B6B79 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
 		A83C3344258A98F0004B6B79 /* RecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsViewController.swift; sourceTree = "<group>"; };
 		A83C3362258A9BB6004B6B79 /* RecordTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordTableViewCell.swift; sourceTree = "<group>"; };
@@ -96,6 +108,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A830D0EE258F672F00C00782 /* SettingGame */ = {
+			isa = PBXGroup;
+			children = (
+				A830D0EF258F67AF00C00782 /* SettingViewController.swift */,
+			);
+			path = SettingGame;
+			sourceTree = "<group>";
+		};
+		A830D0F7258F76F000C00782 /* Strategy */ = {
+			isa = PBXGroup;
+			children = (
+				A830D0F8258F778500C00782 /* GettingOfQuestionsStrategy.swift */,
+			);
+			path = Strategy;
+			sourceTree = "<group>";
+		};
+		A830D103258F951300C00782 /* Observable */ = {
+			isa = PBXGroup;
+			children = (
+				A830D104258F953600C00782 /* Observable.swift */,
+			);
+			path = Observable;
+			sourceTree = "<group>";
+		};
+		A830D112258FAEB300C00782 /* AddingQuestion */ = {
+			isa = PBXGroup;
+			children = (
+				A830D113258FAEFE00C00782 /* AddingQuestionViewController.swift */,
+			);
+			path = AddingQuestion;
+			sourceTree = "<group>";
+		};
 		A83C3349258A99FE004B6B79 /* Records */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,7 +155,12 @@
 			children = (
 				A85312C4258B537A00DA70F7 /* Memento */,
 				A8421AD0258902EB0055BDF7 /* Model */,
+				A830D0F7258F76F000C00782 /* Strategy */,
+				A830D103258F951300C00782 /* Observable */,
 				A86BD04C2589349D00124D7E /* Game */,
+				A83C3349258A99FE004B6B79 /* Records */,
+				A830D0EE258F672F00C00782 /* SettingGame */,
+				A830D112258FAEB300C00782 /* AddingQuestion */,
 				A8421A99258902D50055BDF7 /* WhoWantsToBeAMillionaire */,
 				A8421AB3258902D90055BDF7 /* WhoWantsToBeAMillionaireTests */,
 				A8421ABE258902D90055BDF7 /* WhoWantsToBeAMillionaireUITests */,
@@ -175,6 +224,8 @@
 			isa = PBXGroup;
 			children = (
 				A85312C5258B53D400DA70F7 /* RecordsCaretaker.swift */,
+				A830D11E258FD3E800C00782 /* AdditionalQuestionsCaretaker.swift */,
+				A830D123258FD6A900C00782 /* SettingCaretake.swift */,
 			);
 			path = Memento;
 			sourceTree = "<group>";
@@ -185,7 +236,6 @@
 				A8421AD62589070C0055BDF7 /* Game.swift */,
 				A86BD0552589357D00124D7E /* GameSession.swift */,
 				A86BD06025894EF900124D7E /* GameViewController.swift */,
-				A83C3349258A99FE004B6B79 /* Records */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -322,9 +372,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				A8421AD22589031F0055BDF7 /* Question.swift in Sources */,
+				A830D105258F953600C00782 /* Observable.swift in Sources */,
 				A85312C6258B53D400DA70F7 /* RecordsCaretaker.swift in Sources */,
 				A86BD0562589357D00124D7E /* GameSession.swift in Sources */,
+				A830D124258FD6A900C00782 /* SettingCaretake.swift in Sources */,
+				A830D0F0258F67AF00C00782 /* SettingViewController.swift in Sources */,
+				A830D0F9258F778500C00782 /* GettingOfQuestionsStrategy.swift in Sources */,
 				A83C3340258A8544004B6B79 /* Record.swift in Sources */,
+				A830D114258FAEFE00C00782 /* AddingQuestionViewController.swift in Sources */,
+				A830D11F258FD3E800C00782 /* AdditionalQuestionsCaretaker.swift in Sources */,
 				A8421AD72589070C0055BDF7 /* Game.swift in Sources */,
 				A8421AA5258902D50055BDF7 /* WhoWantsToBeAMillionaire.xcdatamodeld in Sources */,
 				A86BD06125894EF900124D7E /* GameViewController.swift in Sources */,

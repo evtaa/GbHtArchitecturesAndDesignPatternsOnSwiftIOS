@@ -7,98 +7,163 @@
 
 import UIKit
 
-protocol gameViewControllerDelegate: class {
+protocol GameViewControllerDelegate: class {
     func chooseAnswer (question: Question, answer: String?, flagCompleteGame: Bool)
 }
 
 class GameViewController: UIViewController {
     
-    weak var delegate: gameViewControllerDelegate?
+    var alert = UIAlertController()
+    weak var delegate: GameViewControllerDelegate?
+    var gettingOfQuestionStrategy: GettingOfQuestionStrategy {
+        get {
+            switch Game.shared.orderOfQuestions {
+            case .sequential:
+                return SequentialGettingQuestion ()
+            case .random:
+                return RandomGettingQuestion ()
+            }
+        }
+    }
     var question: Question?
+    var flagCompleteGame: Bool = false
+    var answer: String? = nil
     
     @IBOutlet weak var questionUILabel: UILabel!
     @IBOutlet weak var answerAUIButton: UIButton!
     @IBOutlet weak var answerBUIButton: UIButton!
     @IBOutlet weak var answerCUIButton: UIButton!
     @IBOutlet weak var answerDUIButton: UIButton!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let gameSession = GameSession ()
-        delegate = gameSession.self
-        Game.shared.gameSession = gameSession
-        setupViewController ()
-        configQuestionForViewController()
-    }
+
+    @IBOutlet weak var numberOfCurrentQuestionUILabel: UILabel!
+    @IBOutlet weak var percentTrueAnswersUILabel: UILabel!
     
     @IBAction func answerATouchUpInside(_ sender: Any) {
-        if let question = question,
-           let answer = answerAUIButton.currentTitle {
-            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: false)
+        answer = answerAUIButton.currentTitle
+        if let question = question {
+            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: flagCompleteGame)
         }
         checkEndingGame()
         configQuestionForViewController()
     }
     
     @IBAction func answerBTouchUpInside(_ sender: Any) {
-        if let question = question,
-           let answer = answerBUIButton.currentTitle {
-            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: false)
+        answer = answerBUIButton.currentTitle
+        if let question = question {
+            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: flagCompleteGame)
         }
         checkEndingGame()
         configQuestionForViewController()
     }
     
     @IBAction func answerCTouchUpInside(_ sender: Any) {
-        if let question = question,
-           let answer = answerCUIButton.currentTitle {
-            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: false)
+        answer = answerCUIButton.currentTitle
+        if let question = question {
+            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: flagCompleteGame)
         }
         checkEndingGame()
         configQuestionForViewController()
     }
     
     @IBAction func answerDTouchUpInside(_ sender: Any) {
-        if let question = question,
-           let answer = answerDUIButton.currentTitle {
-            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: false)
+        answer = answerDUIButton.currentTitle
+        if let question = question {
+            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: flagCompleteGame)
         }
         checkEndingGame()
         configQuestionForViewController()
     }
     
     @IBAction func finishGameTouchUpInside(_ sender: Any) {
+        answer = nil
+        flagCompleteGame = true
         if let question = question {
-            delegate?.chooseAnswer(question: question, answer: nil, flagCompleteGame: true)
+            delegate?.chooseAnswer(question: question, answer: answer, flagCompleteGame: flagCompleteGame)
         }
         checkEndingGame()
     }
     
-    private func checkEndingGame () {
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
-        if let countUsedQuestions = Game.shared.gameSession?.countUsedQuestions,
-           let limitQuestions = Game.shared.gameSession?.limitQuestions,
-           let countTrueAnswers = Game.shared.gameSession?.countTrueAnswers,
-           let flagCompleteGame = Game.shared.gameSession?.flagCompleteGame,
-           countUsedQuestions == limitQuestions || flagCompleteGame {
-            
-            let score = Int(ceil(Double(countTrueAnswers) / Double(limitQuestions)*100))
-            if score != 0 {
-                let record = Record(date: Date (), score: score)
-                Game.shared.addRecord(record: record)
-            }
-            Game.shared.gameSession = nil
-            self.dismiss(animated: true, completion: nil)
-        } else if let resultCheckAnswer = Game.shared.gameSession?.resultCheckAnswer,
-                  !resultCheckAnswer {
-            Game.shared.gameSession = nil
-            self.dismiss(animated: true, completion: nil)
-        }
+        let gameSession = GameSession (gettingOfQuestionStrategy: gettingOfQuestionStrategy, limitQuestions: 6)
+        delegate = gameSession.self
+        Game.shared.gameSession = gameSession
+        setupViewController ()
+        configQuestionForViewController()
+        configCurrentResult ()
+    }
+    
+    private func configCurrentResult () {
+        let gameSession = Game.shared.gameSession
+        gameSession?.countUsedQuestions.addObserver(self, options: [.new, .initial], closure: { [weak self] (countUsedQuestions, _) in
+            self?.numberOfCurrentQuestionUILabel.text = "Вопрос № \(countUsedQuestions + 1)"
+        })
+        
+        gameSession?.percentTrueAnswers.addObserver(self,options: [.new, .initial], closure: { [weak self] (percentTrueAnswers,_) in
+            self?.percentTrueAnswersUILabel.text = "Вы ответили на \(percentTrueAnswers) процентов вопросов"
+        })
     }
     
     private func setupViewController () {
         questionUILabel.textAlignment = .center
+        numberOfCurrentQuestionUILabel.textAlignment = .center
+        percentTrueAnswersUILabel.textAlignment = .center
+    }
+    
+    private func setupGameOverAlert () {
+        alert = UIAlertController(title: "Уведомление", message: "Вы проиграли", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ОК", style: .cancel, handler: { [weak self] action in
+                                        Game.shared.gameSession = nil
+                                        self?.dismiss(animated: true, completion: nil) }))
+    }
+    
+    private func setupWinerAlert () {
+        let percentTrueAnswers = Game.shared.gameSession?.percentTrueAnswers
+        alert = UIAlertController(title: "Уведомление", message: "Вы ответили на \(percentTrueAnswers?.value ?? 0) процентов вопросов", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ОК", style: .cancel, handler: { [weak self] action in
+                                        Game.shared.gameSession = nil
+                                        self?.dismiss(animated: true, completion: nil) }))
+    }
+    
+    private func setupAbsoluteWinerAlert () {
+        alert = UIAlertController(title: "Уведомление", message: "Вы ответили на все вопросы", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "ОК", style: .cancel, handler: { [weak self] action in
+                                        Game.shared.gameSession = nil
+                                        self?.dismiss(animated: true, completion: nil) }))
+    }
+    
+    private func checkEndingGame () {
+        
+        if let gameSession = Game.shared.gameSession {
+            let countUsedQuestions = gameSession.countUsedQuestions
+            let limitQuestions = gameSession.limitQuestions
+            let flagCompleteGame = gameSession.flagCompleteGame
+            let percentTrueAnswers = gameSession.percentTrueAnswers
+            if let resultCheckAnswer = gameSession.resultCheckAnswer,
+               !resultCheckAnswer {
+                setupGameOverAlert()
+                present(alert, animated: true, completion: nil)
+            } else {
+                if countUsedQuestions.value == limitQuestions {
+                    let score = percentTrueAnswers.value
+                    if score != 0 {
+                        let record = Record(date: Date (), score: score)
+                        Game.shared.addRecord(record: record)
+                    }
+                    setupAbsoluteWinerAlert ()
+                    present(alert, animated: true, completion: nil)
+                } else if flagCompleteGame {
+                    let score = percentTrueAnswers.value
+                    if score != 0 {
+                        let record = Record(date: Date (), score: score)
+                        Game.shared.addRecord(record: record)
+                    }
+                    setupWinerAlert ()
+                    present(alert, animated: true, completion: nil)
+                }
+            }
+        }
     }
     
     private func configQuestionForViewController () {
@@ -107,16 +172,15 @@ class GameViewController: UIViewController {
             self.question = question
             questionUILabel.text = question.textQuestion
             var answers = [String] (question.textAnswers.keys)
+            answers.shuffle()
             var answersUIButton: [UIButton] = []
             answersUIButton.append(answerAUIButton)
             answersUIButton.append(answerBUIButton)
             answersUIButton.append(answerCUIButton)
             answersUIButton.append(answerDUIButton)
-            
-            for answerUIButton in answersUIButton {
-                let answer = answers.randomElement()
+            for (index,answer) in answers.enumerated() {
+                let answerUIButton = answersUIButton [index]
                 answerUIButton.setTitle(answer, for: .normal)
-                answers = answers.filter { $0 != answer }
             }
         }
     }
