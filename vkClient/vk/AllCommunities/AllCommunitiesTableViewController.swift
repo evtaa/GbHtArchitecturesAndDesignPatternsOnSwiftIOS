@@ -11,11 +11,12 @@ import UIKit
 class AllCommunitiesTableViewController: UITableViewController {
     
     var searchGroups: [VkApiGroupItem]?
+    var vkServiceProxy: VkServiceProxy?
     let vkService = VKService ()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        vkServiceProxy = VkServiceProxy(vkService: vkService)
         self.searchGroups = [VkApiGroupItem]()
         self.tableView.reloadData()
         
@@ -62,7 +63,7 @@ extension AllCommunitiesTableViewController: UISearchBarDelegate {
             self.searchGroups = [VkApiGroupItem]()
         }
         else {
-            vkService.loadSearchGroupsData(search: searchText) { [weak self] searchGroups in
+            vkServiceProxy?.loadSearchGroupsData(search: searchText) { [weak self] searchGroups in
                 // сохраняем полученные данные в массиве
                 self?.searchGroups = searchGroups
             }

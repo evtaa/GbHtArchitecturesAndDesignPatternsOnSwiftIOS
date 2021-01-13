@@ -20,6 +20,7 @@ class MyFriendsTableViewController: UITableViewController {
     var myFriendNameSectionTitles: [String] = []
     var myFriends: [VkApiUsersItem]?
     let vkService = VKService()
+    var vkServiceProxy: VkServiceProxy?
     var token: NotificationToken?
     var usersOfApplication = [FirebaseUser] ()
     var photoService: PhotoService?
@@ -30,6 +31,7 @@ class MyFriendsTableViewController: UITableViewController {
         
         super.viewDidLoad()
         
+        vkServiceProxy = VkServiceProxy(vkService: vkService)
         photoService = PhotoService (container: tableView)
         setupTableView ()
         setupRefreshControl ()
@@ -73,7 +75,9 @@ class MyFriendsTableViewController: UITableViewController {
     private func fetchFriendsData () {
         
         if let userID = Session.instance.userId {
-            self.vkService.loadFriendsData(userId: String(userID)).get { [weak self] users in
+            self.vkServiceProxy?.loadFriendsData(userId: String(userID)).get
+            //self.vkService.loadFriendsData(userId: String(userID)).get
+            { [weak self] users in
                 // Обрабатываем ответ сетевого запроса
                 guard let self = self else { return }
                 self.vkService.realmSaveService.updateUsers(users: users)

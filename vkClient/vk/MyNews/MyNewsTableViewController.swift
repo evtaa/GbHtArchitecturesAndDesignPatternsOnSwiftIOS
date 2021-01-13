@@ -14,6 +14,7 @@ class MyNewsTableViewController: UITableViewController {
     internal let newRefreshControl = UIRefreshControl()
     var myNews: [VkApiNewItem]?
     let vkService = VKService ()
+    var vkServiceProxy: VkServiceProxy?
     var token: NotificationToken?
     var photoService: PhotoService?
     
@@ -25,6 +26,7 @@ class MyNewsTableViewController: UITableViewController {
         
         super.viewDidLoad()
         
+        vkServiceProxy = VkServiceProxy(vkService: vkService)
         photoService = PhotoService(container: tableView)
         setupTableView ()
         setupRefreshControl ()
@@ -89,7 +91,8 @@ class MyNewsTableViewController: UITableViewController {
     private func fetchNewsData (startTime: Int = 0) {
         DispatchQueue.global().async { [weak self] in
             // отправляем сетевой запрос загрузки новостей
-            self?.vkService.loadNewsData(startTime: startTime, typeNew: .post,.photo) { [weak self] result,nextFrom  in
+            self?.vkServiceProxy?.loadNewsData(startTime: startTime, typeNew: [.post,.photo])
+            { [weak self] result,nextFrom  in
                 guard let self = self else { return }
                 // выключаем вращающийся индикатор
                 self.newRefreshControl.endRefreshing()
@@ -323,7 +326,7 @@ extension MyNewsTableViewController: UITableViewDataSourcePrefetching {
             // Начинаем загрузку данных и меняем флаг isLoading
             isLoading = true
             // Обратите внимание, что сетевой сервис должен уметь обрабатывать входящий параметр nextFrom
-            vkService.loadNewsData(startFrom: nextFrom, typeNew: .photo,.post)
+            vkServiceProxy?.loadNewsData(startFrom: nextFrom, typeNew: [.photo,.post])
             // и в качестве результата возвращать не только свежераспарсенные новости, но и nextFrom для будущего запроса
             {[weak self] (result, nextFrom) in
                 guard let self = self else { return }

@@ -26,7 +26,29 @@ protocol SaveServiceInterface {
     func readGroupList () -> [VkApiGroupItem]
 }
 
-class VKService {
+enum TypeNew: String {
+    case post
+    case photo
+}
+
+enum loadNewsDataError: Error {
+    case invalidNews
+}
+
+protocol VkServiceInterface {
+    
+    func loadFriendsData(userId: String) -> Promise <[VkApiUsersItem]>
+    
+    func loadPhotosData (userId: Int)
+    
+    func loadGroupsData (userId: Int)
+    
+    func loadSearchGroupsData (search: String, completion: @escaping ([VkApiGroupItem]) -> Void)
+    
+    func loadNewsData (startTime: Int, startFrom: String, typeNew: [TypeNew], completion: @escaping (Swift.Result <[VkApiNewItem]?, loadNewsDataError>, String?) -> Void)
+}
+
+class VKService: VkServiceInterface {
     
     // базовый URL сервиса
     let baseUrl = "https://api.vk.com/method"
@@ -218,16 +240,8 @@ class VKService {
         }
     }
     
-    enum TypeNew: String {
-        case post
-        case photo
-    }
     
-    enum loadNewsDataError: Error {
-        case invalidNews
-    }
-    
-    func loadNewsData(startTime: Int = 0, startFrom: String = "", typeNew: TypeNew ..., completion: @escaping (Swift.Result <[VkApiNewItem]?, loadNewsDataError>, String?) -> Void){
+    func loadNewsData(startTime: Int = 0, startFrom: String = "", typeNew: [TypeNew], completion: @escaping (Swift.Result <[VkApiNewItem]?, loadNewsDataError>, String?) -> Void){
         var filters: String = ""
         for item in typeNew {
             switch item {

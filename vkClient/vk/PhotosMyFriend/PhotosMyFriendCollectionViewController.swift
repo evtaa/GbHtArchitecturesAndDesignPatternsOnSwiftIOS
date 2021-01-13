@@ -16,6 +16,7 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
     var friendSelected : VkApiUsersItem?
     var photosFriend = [VkApiPhotoItem?] ()
 
+    var vkServiceProxy: VkServiceProxy?
     let vkService = VKService()
     var token: NotificationToken?
     var photoService: PhotoService?
@@ -23,6 +24,7 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        vkServiceProxy = VkServiceProxy(vkService: vkService)
         photoService = PhotoService (container: collectionView)
         setupCollectionView ()
         setupRefreshControl ()
@@ -66,7 +68,8 @@ class PhotosMyFriendCollectionViewController: UICollectionViewController {
     private func fetchPhotosData () {
         DispatchQueue.global().async { [weak self] in
             guard let friendSelectedId = self?.friendSelected?.id else {return}
-            self?.vkService.loadPhotosData(userId: friendSelectedId)
+            
+            self?.vkServiceProxy?.loadPhotosData(userId: friendSelectedId)
         }
     }
     
