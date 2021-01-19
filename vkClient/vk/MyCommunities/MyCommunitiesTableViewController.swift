@@ -13,6 +13,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     
     internal let newRefreshControl = UIRefreshControl()
     var myGroups: [VkApiGroupItem]?
+    var vkServiceProxy: VkServiceProxy?
     let vkService = VKService ()
     var token: NotificationToken?
     var photoService: PhotoService?
@@ -20,6 +21,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        vkServiceProxy = VkServiceProxy(vkService: vkService)
         photoService = PhotoService(container: tableView)
         setupTableView ()
         setupRefreshControl ()
@@ -59,7 +61,7 @@ class MyCommunitiesTableViewController: UITableViewController {
     
     private func fetchGroupsData () {
         if let userID = Session.instance.userId {
-            vkService.loadGroupsData(userId: userID)
+            vkServiceProxy?.loadGroupsData(userId: userID)
             self.newRefreshControl.endRefreshing()
         }
     }
